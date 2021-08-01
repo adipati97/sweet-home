@@ -3,6 +3,7 @@ package com.upgrad.assignment.BookingService.controllers;
 import com.upgrad.assignment.BookingService.dto.BookingInfoDTO;
 import com.upgrad.assignment.BookingService.dto.TransactionDetailsDTO;
 import com.upgrad.assignment.BookingService.entities.BookingInfoEntity;
+import com.upgrad.assignment.BookingService.exceptions.handlers.InvalidPaymentMethodHandler;
 import com.upgrad.assignment.BookingService.services.BookingInfoService;
 
 import org.modelmapper.ModelMapper;
@@ -21,6 +22,8 @@ import java.util.Random;
 @RestController
 @RequestMapping(value = "/booking_service")
 public class BookingInfoController {
+    private static String PAYMENT_MODE_CARD = "CARD";
+    private static String PAYMENT_MODE_UPI = "UPI";
     @Autowired
     private BookingInfoService bookingInfoService;
 
@@ -77,8 +80,18 @@ public class BookingInfoController {
         @RequestBody TransactionDetailsDTO transactionDetails,
         @PathVariable int bookingId
     ) {
+        //check whether payment mode is either CARD or UPI
+        if (!getIsValidPaymentMethod(transactionDetails.getPaymentMethod())) {
+            return new ResponseEntity(
+                new InvalidPaymentMethodHandler().getExceptionResponse(), HttpStatus.BAD_REQUEST);
+        }
+
         BookingInfoEntity bookingInfo = bookingInfoService.getBookingInfo(transactionDetails, bookingId);
         BookingInfoDTO bookingInfoDTO = modelMapper.map(bookingInfo, BookingInfoDTO.class);
         return new ResponseEntity(bookingInfoDTO, HttpStatus.CREATED);
+    }
+
+    private boolean getIsValidPaymentMethod (String paymentMethod) {
+        return paymentMethod.equalsIgnoreCase(PAYMENT_MODE_CARD) && paymentMethod.equalsIgnoreCase(PAYMENT_MODE_UPI);
     }
 }
