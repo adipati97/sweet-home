@@ -3,6 +3,8 @@ package com.upgrad.assignment.BookingService.controllers;
 import com.upgrad.assignment.BookingService.dto.BookingInfoDTO;
 import com.upgrad.assignment.BookingService.dto.TransactionDetailsDTO;
 import com.upgrad.assignment.BookingService.entities.BookingInfoEntity;
+import com.upgrad.assignment.BookingService.exceptions.InvalidBookingIdException;
+import com.upgrad.assignment.BookingService.exceptions.handlers.InvalidBookingIdHandler;
 import com.upgrad.assignment.BookingService.exceptions.handlers.InvalidPaymentMethodHandler;
 import com.upgrad.assignment.BookingService.services.BookingInfoService;
 
@@ -85,10 +87,13 @@ public class BookingInfoController {
             return new ResponseEntity(
                 new InvalidPaymentMethodHandler().getExceptionResponse(), HttpStatus.BAD_REQUEST);
         }
-
-        BookingInfoEntity bookingInfo = bookingInfoService.getBookingInfo(transactionDetails, bookingId);
-        BookingInfoDTO bookingInfoDTO = modelMapper.map(bookingInfo, BookingInfoDTO.class);
-        return new ResponseEntity(bookingInfoDTO, HttpStatus.CREATED);
+        try {
+            BookingInfoEntity bookingInfo = bookingInfoService.getBookingInfo(transactionDetails, bookingId);
+            BookingInfoDTO bookingInfoDTO = modelMapper.map(bookingInfo, BookingInfoDTO.class);
+            return new ResponseEntity(bookingInfoDTO, HttpStatus.CREATED);
+        } catch (InvalidBookingIdException e) {
+            return new ResponseEntity(new InvalidBookingIdHandler().getExceptionResponse(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     private boolean getIsValidPaymentMethod (String paymentMethod) {

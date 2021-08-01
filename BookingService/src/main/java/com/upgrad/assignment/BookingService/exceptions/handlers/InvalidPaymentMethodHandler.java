@@ -3,7 +3,6 @@ package com.upgrad.assignment.BookingService.exceptions.handlers;
 import com.upgrad.assignment.BookingService.exceptions.InvalidPaymentMethodException;
 import com.upgrad.assignment.BookingService.exceptions.responses.InvalidPaymentMethodResponse;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -21,9 +20,9 @@ public class InvalidPaymentMethodHandler extends ResponseEntityExceptionHandler 
     }
 
     private InvalidPaymentMethodException getException () {
-        InvalidPaymentMethodException exception = new InvalidPaymentMethodException();
-        exception.setMessage("Invalid mode of payment");
-        exception.setStatusCode(HttpStatus.BAD_REQUEST.value());
-        return exception;
+        return new InvalidPaymentMethodException(
+            "Invalid mode of payment",
+            HttpStatus.BAD_REQUEST.value()
+        );
     }
 }
