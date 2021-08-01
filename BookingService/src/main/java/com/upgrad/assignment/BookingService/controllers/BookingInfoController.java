@@ -92,6 +92,6 @@ public class BookingInfoController {
     }
 
     private boolean getIsValidPaymentMethod (String paymentMethod) {
-        return paymentMethod.equalsIgnoreCase(PAYMENT_MODE_CARD) && paymentMethod.equalsIgnoreCase(PAYMENT_MODE_UPI);
+        return paymentMethod.equalsIgnoreCase(PAYMENT_MODE_CARD) || paymentMethod.equalsIgnoreCase(PAYMENT_MODE_UPI);
     }
 }
