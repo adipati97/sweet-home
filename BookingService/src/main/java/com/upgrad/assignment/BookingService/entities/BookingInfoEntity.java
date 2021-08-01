@@ -1,5 +1,7 @@
 package com.upgrad.assignment.BookingService.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -68,6 +70,7 @@ public class BookingInfoEntity {
         this.aadharNumber = aadharNumber;
     }
 
+    @JsonIgnore
     public int getNumOfRooms() {
         return numOfRooms;
     }
@@ -115,7 +118,6 @@ public class BookingInfoEntity {
             ", fromDate=" + fromDate +
             ", toDate=" + toDate +
             ", aadharNumber='" + aadharNumber + '\'' +
-            ", numOfRooms=" + numOfRooms +
             ", roomNumbers='" + roomNumbers + '\'' +
             ", roomPrice=" + roomPrice +
             ", transactionId=" + transactionId +

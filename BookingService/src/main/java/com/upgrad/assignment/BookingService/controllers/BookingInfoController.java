@@ -42,10 +42,7 @@ public class BookingInfoController {
         newBooking.setBookedOn(new Date());
         BookingInfoEntity newBookingInfo = bookingInfoService.acceptBookingDetails(newBooking);
 
-        //Convert Entity to DTO
-        BookingInfoDTO newBookingInfoDTO = modelMapper.map(newBookingInfo, BookingInfoDTO.class);
-
-        return new ResponseEntity(newBookingInfoDTO, HttpStatus.CREATED);
+        return new ResponseEntity(newBookingInfo, HttpStatus.CREATED);
     }
 
     private void setRoomNumbers (BookingInfoEntity bookingInfo) {
